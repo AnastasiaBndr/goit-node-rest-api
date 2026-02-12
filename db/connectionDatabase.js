@@ -1,4 +1,3 @@
-import { error } from "console";
 import sequelize from "./sequelize.js";
 
 const connectDatabase = async () => {

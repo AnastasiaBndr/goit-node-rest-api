@@ -1,12 +1,12 @@
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize({
-  dialect: "postgres",
-  host: "dpg-d66rb94r85hc739ssaog-a.frankfurt-postgres.render.com",
-  username: "db_contacts_ctxf_user",
-  database: "db_contacts_ctxf",
-  password: "nF7BIbgAxCJKM75t7UxtdJLM6XFzzbXg",
-  port: 5432,
+  dialect: process.env.DATABASE_DIALECT,
+  host: process.env.DATABASE_HOST,
+  username: process.env.DATABASE_USERNAME,
+  database: process.env.DATABASE_NAME,
+  password: process.env.DATABASE_PASSWORD,
+  port: process.env.DATABASE_PORT,
   dialectOptions: {
     ssl: true,
   },
