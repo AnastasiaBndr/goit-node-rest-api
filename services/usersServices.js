@@ -23,9 +23,34 @@ const loginUser = async (email, password) => {
   return user;
 };
 
+const logoutUser = async (userId) => {
+  const user = await User.findByPk(userId);
+  if (!user) return null;
+  await user.update({ token: null });
+  return user;
+};
+
+const currentUser = async (userId) => {
+  const user = await User.findByPk(userId);
+  if (!user) return null;
+  return user;
+};
+
+const updateUser = async (userId, body) => {
+  const user = await User.findByPk(userId);
+  if (!user) return null;
+
+  await user.update(body);
+
+  return user;
+};
+
 const usersService = {
   registerUser,
   loginUser,
+  logoutUser,
+  currentUser,
+  updateUser,
 };
 
 export default usersService;

@@ -10,17 +10,21 @@ const Strategy = passportJWT.Strategy;
 const params = {
   secretOrKey: secret,
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  passReqToCallback: true,
 };
 
 passport.use(
-  new Strategy(params, function (payload, done) {
-    User.findOne({ where: { id: payload.id } })
-      .then((user) => {
-        if (!user) {
-          return done(new Error("User not found"));
-        }
-        return done(null, user.dataValues);
-      })
-      .catch((err) => done(err));
+  new Strategy(params, async (req, payload, done) => {
+    try {
+      const token = ExtractJWT.fromAuthHeaderAsBearerToken()(req);
+      const user = await User.findOne({ where: { id: payload.id } });
+      if (!user || user.token !== token) {
+        return done(null, false);
+      }
+
+      return done(null, user);
+    } catch (error) {
+      return done(error, false);
+    }
   })
 );

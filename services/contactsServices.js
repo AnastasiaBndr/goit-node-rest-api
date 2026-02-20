@@ -1,19 +1,25 @@
 import Contact from "../db/models/Contact.js";
 
-const listContacts = async (userId) => {
-  const contacts = await Contact.findAll({ where: { owner: userId } });
+const listContacts = async (userId, query) => {
+  const { page, limit, ...filters } = query;
+  console.log(filters);
+  const contacts = await Contact.findAll({
+    where: { owner: userId, ...filters },
+    offset: page * limit - limit || 0,
+    limit: limit || 1000,
+  });
   return contacts;
 };
 const getContactById = async (contactId, userId) => {
   const contact = await Contact.findOne({
-    where: { id:contactId,owner: userId },
+    where: { id: contactId, owner: userId },
   });
   if (!contact) return null;
   return contact;
 };
 const removeContact = async (contactId, userId) => {
   const contact = await Contact.findOne({
-    where: { owner: userId,id:contactId },
+    where: { owner: userId, id: contactId },
   });
   if (!contact) return null;
 

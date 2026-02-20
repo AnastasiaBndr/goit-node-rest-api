@@ -4,13 +4,13 @@ import ctrlWrapper from "../middlewares/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 
 const getAllContacts = async (req, res) => {
-  const contacts = await contactsService.listContacts(req.user.id);
+  const contacts = await contactsService.listContacts(req.user.id, req.query);
   res.status(200).json(contacts);
 };
 
 const getOneContact = async (req, res) => {
   const { id } = req.params;
-  const contact = await contactsService.getContactById(id,req.user.id);
+  const contact = await contactsService.getContactById(id, req.user.id);
   if (!contact) throw HttpError(404);
 
   res.status(200).json(contact);
@@ -18,7 +18,7 @@ const getOneContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const contact = await contactsService.removeContact(id,req.user.id);
+  const contact = await contactsService.removeContact(id, req.user.id);
   if (!contact) {
     throw HttpError(404);
   }
