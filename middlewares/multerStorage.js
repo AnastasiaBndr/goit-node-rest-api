@@ -2,7 +2,7 @@ import multer from "multer";
 import path from "node:path";
 import HttpError from "../helpers/HttpError.js";
 
-const uploadDir = path.resolve("public","avatars");
+const uploadDir = path.resolve("temp");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

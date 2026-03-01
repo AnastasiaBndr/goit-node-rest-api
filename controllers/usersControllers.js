@@ -73,12 +73,12 @@ const updateUser = async (req, res) => {
 };
 
 const updateAvatar = async (req, res, next) => {
-    const { description } = req.body;
-    const { path: temporaryName, originalname } = req.file;
-    console.log(description)
-    res.status(200).json({
-
-    });
+  const file = req.file;
+  const user = await usersService.updateAvatar(req.user.id, file);
+  if (!user) throw HttpError(401);
+  res.status(200).json({
+    avatarURL: user.avatarURL,
+  });
 };
 
 export const usersControllers = {

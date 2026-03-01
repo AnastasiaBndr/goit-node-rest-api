@@ -10,12 +10,12 @@ import errorHandler from "./middlewares/errorHandler.js";
 import contactsRouter from "./routes/contactsRouter.js";
 import usersRouter from "./routes/usersRouter.js";
 
-
 const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", usersRouter);
@@ -36,5 +36,5 @@ await connectDatabase();
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server is running. Use our API on port: ${PORT}`);
+  console.log(`Server is running. Use our API on port: ${PORT}`);
 });
