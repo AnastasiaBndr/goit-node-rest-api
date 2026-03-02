@@ -64,7 +64,7 @@ const updateStatusContact = async (req, res) => {
   res.status(200).json(contact);
 };
 
-export const contactControllers = {
+const contactControllers = {
   getAllContactsController: ctrlWrapper(getAllContacts),
   getOneContactController: ctrlWrapper(getOneContact),
   deleteContactController: ctrlWrapper(deleteContact),
@@ -72,3 +72,5 @@ export const contactControllers = {
   updateContactController: ctrlWrapper(updateContact),
   updateStatusContactController: ctrlWrapper(updateStatusContact),
 };
+
+export default contactControllers;

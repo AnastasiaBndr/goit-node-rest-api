@@ -81,7 +81,7 @@ const updateAvatar = async (req, res, next) => {
   });
 };
 
-export const usersControllers = {
+const usersControllers = {
   registerUserController: ctrlWrapper(registerUser),
   loginUserController: ctrlWrapper(loginUser),
   logoutUserController: ctrlWrapper(logoutUser),
@@ -89,3 +89,5 @@ export const usersControllers = {
   updateUserController: ctrlWrapper(updateUser),
   updateAvatarController: ctrlWrapper(updateAvatar),
 };
+
+export default usersControllers;

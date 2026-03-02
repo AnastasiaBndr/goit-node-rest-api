@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import "dotenv/config";
 
 const sequelize = new Sequelize({
   dialect: process.env.DATABASE_DIALECT,
@@ -11,5 +12,6 @@ const sequelize = new Sequelize({
     ssl: true,
   },
 });
+
 
 export default sequelize;

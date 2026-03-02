@@ -1,5 +1,5 @@
 import express from "express";
-import { usersControllers } from "../controllers/usersControllers.js";
+import usersControllers from "../controllers/usersControllers.js";
 import validateBody from "../helpers/validateBody.js";
 import {
   contactAuthSchema,
