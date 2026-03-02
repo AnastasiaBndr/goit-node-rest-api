@@ -55,6 +55,7 @@ describe("tests login controller", () => {
 
     expect(status).toBe(200);
     expect(body.user.email).toBe(registerData.email);
+    expect(body.user.subscription).toBe("starter");
     expect(body).toHaveProperty("token");
 
     const dbUser = await User.findOne({ where: { email: registerData.email } });
