@@ -4,6 +4,7 @@ import validateBody from "../helpers/validateBody.js";
 import {
   contactAuthSchema,
   updateSubscriptionSchema,
+  verifySchema
 } from "../schemas/usersSchemas.js";
 import auth from "../middlewares/auth.js";
 import upload from "../middlewares/multerStorage.js";
@@ -39,5 +40,11 @@ usersRouter.patch(
   upload.single("avatar"),
   usersControllers.updateAvatarController
 );
+usersRouter.post(
+  "/verify",
+  validateBody(verifySchema),
+  usersControllers.reVerifyUserController
+);
+usersRouter.get("/verify/:verificationToken", usersControllers.verifyUserController);
 
 export default usersRouter;

@@ -11,7 +11,6 @@ const getAllContacts = async (req, res) => {
 const getOneContact = async (req, res) => {
   const { id } = req.params;
   const contact = await contactsService.getContactById(id, req.user.id);
-  if (!contact) throw HttpError(404);
 
   res.status(200).json(contact);
 };
@@ -19,9 +18,7 @@ const getOneContact = async (req, res) => {
 const deleteContact = async (req, res) => {
   const { id } = req.params;
   const contact = await contactsService.removeContact(id, req.user.id);
-  if (!contact) {
-    throw HttpError(404);
-  }
+
   res.status(200).json(contact);
 };
 
@@ -37,15 +34,10 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  if (!Object.keys(req.body).length) {
-    throw HttpError(400, "Body must have at least one field");
-  }
   const { id } = req.params;
   const body = req.body;
   const contact = await contactsService.updateContact(id, body, req.user.id);
-  if (!contact) {
-    throw HttpError(404);
-  }
+
   res.status(200).json(contact);
 };
 
@@ -58,9 +50,7 @@ const updateStatusContact = async (req, res) => {
     body,
     req.user.id
   );
-  if (!contact) {
-    throw HttpError(404);
-  }
+
   res.status(200).json(contact);
 };
 

@@ -1,4 +1,5 @@
 import Contact from "../db/models/Contact.js";
+import HttpError from "../helpers/HttpError.js";
 
 const listContacts = async (userId, query) => {
   const { page, limit, ...filters } = query;
@@ -14,14 +15,16 @@ const getContactById = async (contactId, userId) => {
   const contact = await Contact.findOne({
     where: { id: contactId, owner: userId },
   });
-  if (!contact) return null;
+  if (!contact) throw HttpError(404);
   return contact;
 };
 const removeContact = async (contactId, userId) => {
   const contact = await Contact.findOne({
     where: { owner: userId, id: contactId },
   });
-  if (!contact) return null;
+  if (!contact) {
+    throw HttpError(404);
+  }
 
   await contact.destroy();
   return contact;
@@ -38,8 +41,14 @@ const addContact = async (name, email, phone, userId) => {
 };
 
 const updateContact = async (contactId, body, userId) => {
+  if (!Object.keys(body).length) {
+    throw HttpError(400, "Body must have at least one field");
+  }
+
   const contact = await getContactById(contactId, userId);
-  if (!contact) return null;
+  if (!contact) {
+    throw HttpError(404);
+  }
 
   await contact.update(body);
 
@@ -48,7 +57,9 @@ const updateContact = async (contactId, body, userId) => {
 
 const updateStatusContact = async (contactId, body, userId) => {
   const contact = await getContactById(contactId, userId);
-  if (!contact) return null;
+  if (!contact) {
+    throw HttpError(404);
+  }
 
   await contact.update({ favorite: body.favorite });
 

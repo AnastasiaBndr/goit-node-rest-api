@@ -11,3 +11,4 @@ await connectDatabase();
 app.listen(PORT, () => {
   console.log(`Server is running. Use our API on port: ${PORT}`);
 });
+

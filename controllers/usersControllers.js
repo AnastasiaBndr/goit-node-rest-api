@@ -1,14 +1,10 @@
 import usersService from "../services/usersServices.js";
 import tokenOperations from "../db/jwt/jwt.js";
-import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../middlewares/ctrlWrapper.js";
 
 const registerUser = async (req, res) => {
-  const { email, password } = req.body;
-  console.log(password);
-
-  const user = await usersService.registerUser(email, password);
-  if (!user) throw HttpError(409, "Email in use");
+  const user = await usersService.registerUser(req.body);
+  
   res.status(201).json({
     user: {
       email: user.email,
@@ -18,11 +14,8 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const user = await usersService.loginUser(req.body);
 
-  const user = await usersService.loginUser(email, password);
-
-  if (!user) throw HttpError(401, "Email or password is wrong");
   const payload = {
     id: user.id,
     email: user.email,
@@ -41,15 +34,13 @@ const loginUser = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-  const user = await usersService.logoutUser(req.user.id);
-  if (!user) throw HttpError(401);
+  await usersService.logoutUser(req.user.id);
 
   res.status(204).send();
 };
 
 const currentUser = async (req, res) => {
   const user = await usersService.currentUser(req.user.id);
-  if (!user) throw HttpError(401);
 
   res.status(200).json({
     email: user.email,
@@ -58,13 +49,7 @@ const currentUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  if (!Object.keys(req.body).length) {
-    throw HttpError(400, "Body must have at least one field");
-  }
-  const body = req.body;
-
-  const user = await usersService.updateUser(req.user.id, body);
-  if (!user) throw HttpError(401);
+  const user = await usersService.updateUser(req.user.id, req.body);
 
   res.status(200).json({
     email: user.email,
@@ -75,10 +60,22 @@ const updateUser = async (req, res) => {
 const updateAvatar = async (req, res, next) => {
   const file = req.file;
   const user = await usersService.updateAvatar(req.user.id, file);
-  if (!user) throw HttpError(401);
   res.status(200).json({
     avatarURL: user.avatarURL,
   });
+};
+const verifyUser = async (req, res) => {
+  const { verificationToken } = req.params;
+  await usersService.verifyUser(verificationToken);
+
+  res.status(200).json({ message: "Verification successful" });
+};
+
+const reVerifyUser = async (req, res) => {
+  const { email } = req.body;
+  await usersService.reVerifyUser(email);
+
+  res.status(200).json({ message: "Verification email sent!" });
 };
 
 const usersControllers = {
@@ -88,6 +85,8 @@ const usersControllers = {
   currentUserController: ctrlWrapper(currentUser),
   updateUserController: ctrlWrapper(updateUser),
   updateAvatarController: ctrlWrapper(updateAvatar),
+  verifyUserController: ctrlWrapper(verifyUser),
+  reVerifyUserController: ctrlWrapper(reVerifyUser),
 };
 
 export default usersControllers;
